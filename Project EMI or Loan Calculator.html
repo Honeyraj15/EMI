@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Loan EMI Calculator</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Loan EMI Calculator</h2>
+        <form id="emi-form">
+            <label>Loan Amount (₹):</label>
+            <input type="number" id="loanAmount" required><br><br>
+
+            <label>Interest Rate (Annual %):</label>
+            <input type="number" id="InterestRate" step="0.01" required><br><br>
+
+            <label>Loan Tenure (Years):</label>
+            <input type="number" id="loanTanure" required><br><br>
+
+            <button type="submit">Calculate EMI</button>
+        </form>
+
+        <div id="result"></div>
+
+    </div>
+</body>
+<script>
+    document.getElementById('emi-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+        const interestRate = parseFloat(document.getElementById('InterestRate').value) / 100 / 12;
+        const loanTenure = parseInt(document.getElementById('loanTanure').value) * 12;
+
+        const emi = (loanAmount * interestRate * Math.pow(1 + interestRate, loanTenure)) / (Math.pow(1 + interestRate, loanTenure) - 1);
+        const totalPayment = emi * loanTenure;
+        const totalInterest = totalPayment - loanAmount;
+
+        document.getElementById('result').innerHTML = `
+            <h3>EMI Details</h3>
+            <p>Monthly EMI: ₹${emi.toFixed(2)}</p>
+            <p>Total Payment: ₹${totalPayment.toFixed(2)}</p>
+            <p>Total Interest: ₹${totalInterest.toFixed(2)}</p>
+        `;
+    });
+</html>
